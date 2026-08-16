@@ -1,0 +1,54 @@
+version: '3.8'
+
+services:
+  mongodb:
+    image: mongo:7
+    container_name: medassist-mongo
+    environment:
+      MONGO_INITDB_DATABASE: medassist
+    volumes:
+      - mongo_data:/data/db
+    ports:
+      - '27017:27017'
+    healthcheck:
+      test: echo 'db.runCommand("ping").ok' | mongosh localhost:27017/test
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build:
+      context: ./backend
+    container_name: medassist-backend
+    ports:
+      - '5001:5001'
+    environment:
+      MONGODB_URI: mongodb://mongodb:27017/medassist
+      NODE_ENV: development
+      PORT: 5001
+      FRONTEND_URL: http://localhost:5173
+    depends_on:
+      mongodb:
+        condition: service_healthy
+    volumes:
+      - ./backend:/app
+      - /app/node_modules
+    command: npm run dev
+
+  frontend:
+    build:
+      context: ./frontend
+    container_name: medassist-frontend
+    ports:
+      - '5173:5173'
+    environment:
+      VITE_API_URL: http://localhost:5001/api
+    depends_on:
+      - backend
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    command: npm run dev
+
+volumes:
+  mongo_data:

@@ -1,0 +1,301 @@
+import mongoose from 'mongoose';
+import dotenv from 'dotenv';
+import Medicine from '../models/Medicine.js';
+
+dotenv.config();
+
+const seedMedicines = [
+  {
+    name: 'Paracetamol 500mg',
+    category: 'Analgesic / Antipyretic',
+    stock: 250,
+    price: 25,
+    manufacturer: 'MediCore Pharma Ltd.',
+    dosage: '500mg',
+    uses: ['Headache', 'Fever', 'Body pain'],
+    sideEffects: 'Rare side effects. May cause liver damage if overdosed.',
+  },
+  {
+    name: 'Amoxicillin 500mg',
+    category: 'Antibiotic',
+    stock: 160,
+    price: 120,
+    manufacturer: 'HealWell Pharma',
+    dosage: '500mg',
+    uses: ['Bacterial infections', 'Respiratory tract infections'],
+    sideEffects: 'Mild nausea, diarrhea, rash',
+  },
+  {
+    name: 'Azithromycin 500mg',
+    category: 'Antibiotic',
+    stock: 95,
+    price: 180,
+    manufacturer: 'NovaCure Labs',
+    dosage: '500mg',
+    uses: ['Respiratory infections', 'Throat infections'],
+    sideEffects: 'Nausea, diarrhea',
+  },
+  {
+    name: 'Ciprofloxacin 500mg',
+    category: 'Antibiotic',
+    stock: 70,
+    price: 145,
+    manufacturer: 'PrimeMed Biotech',
+    dosage: '500mg',
+    uses: ['Urinary tract infections', 'Respiratory infections'],
+    sideEffects: 'Tendon damage (rare), dizziness',
+  },
+  {
+    name: 'Cetirizine 10mg',
+    category: 'Antihistamine',
+    stock: 340,
+    price: 18,
+    manufacturer: 'Aster Remedies',
+    dosage: '10mg',
+    uses: ['Allergies', 'Hay fever', 'Itching'],
+    sideEffects: 'Drowsiness, headache',
+  },
+  {
+    name: 'Ibuprofen 400mg',
+    category: 'Analgesic / NSAID',
+    stock: 200,
+    price: 30,
+    manufacturer: 'PharmaPlus Ltd.',
+    dosage: '400mg',
+    uses: ['Pain relief', 'Inflammation', 'Fever'],
+    sideEffects: 'Stomach upset, heartburn',
+  },
+  {
+    name: 'Omeprazole 20mg',
+    category: 'Anti-ulcerant',
+    stock: 120,
+    price: 50,
+    manufacturer: 'GastroWell Labs',
+    dosage: '20mg',
+    uses: ['Acid reflux', 'GERD', 'Ulcer prevention'],
+    sideEffects: 'Headache, diarrhea',
+  },
+  {
+    name: 'Atorvastatin 10mg',
+    category: 'Cardiac Care',
+    stock: 85,
+    price: 60,
+    manufacturer: 'CardioHealth Inc.',
+    dosage: '10mg',
+    uses: ['High cholesterol', 'Heart disease prevention'],
+    sideEffects: 'Muscle pain, liver issues (rare)',
+  },
+
+  // ── VITHOBA ──────────────────────────────────────────────────────────────────
+  {
+    name: 'Kali Strong Balm - 10GM',
+    category: 'Pain Relief',
+    stock: 150,
+    price: 0,
+    manufacturer: 'Vithoba',
+    dosage: '10GM',
+    uses: ['Muscle pain', 'Joint pain', 'Headache'],
+    sideEffects: '',
+  },
+  {
+    name: 'Premium Paste - 380GM',
+    category: 'Oral Care',
+    stock: 150,
+    price: 0,
+    manufacturer: 'Vithoba',
+    dosage: '380GM',
+    uses: ['Teeth cleaning', 'Oral hygiene'],
+    sideEffects: '',
+  },
+  {
+    name: 'Rootfix Paste - 380GM',
+    category: 'Oral Care',
+    stock: 150,
+    price: 0,
+    manufacturer: 'Vithoba',
+    dosage: '380GM',
+    uses: ['Gum care', 'Root strengthening', 'Oral hygiene'],
+    sideEffects: '',
+  },
+  {
+    name: 'Ayu Keshtel - 100ML',
+    category: 'Hair Care',
+    stock: 150,
+    price: 0,
+    manufacturer: 'Vithoba',
+    dosage: '100ML',
+    uses: ['Hair nourishment', 'Scalp care'],
+    sideEffects: '',
+  },
+  {
+    name: 'Keshratna Hair Colour - 10',
+    category: 'Hair Care',
+    stock: 150,
+    price: 0,
+    manufacturer: 'Vithoba',
+    dosage: '10',
+    uses: ['Hair colouring'],
+    sideEffects: '',
+  },
+  {
+    name: 'Pain Oil Vithoba - 30ML',
+    category: 'Pain Relief',
+    stock: 150,
+    price: 0,
+    manufacturer: 'Vithoba',
+    dosage: '30ML',
+    uses: ['Joint pain', 'Muscle pain', 'Back pain'],
+    sideEffects: '',
+  },
+  {
+    name: 'Vithoba Ayu Manjan - 15GM',
+    category: 'Oral Care',
+    stock: 150,
+    price: 0,
+    manufacturer: 'Vithoba',
+    dosage: '15GM',
+    uses: ['Teeth cleaning', 'Gum care', 'Oral hygiene'],
+    sideEffects: '',
+  },
+  {
+    name: 'Vithoba Ayu Manjan - 40GM',
+    category: 'Oral Care',
+    stock: 150,
+    price: 0,
+    manufacturer: 'Vithoba',
+    dosage: '40GM',
+    uses: ['Teeth cleaning', 'Gum care', 'Oral hygiene'],
+    sideEffects: '',
+  },
+  {
+    name: 'Vithoba Ayu Manjan - 50GM',
+    category: 'Oral Care',
+    stock: 150,
+    price: 0,
+    manufacturer: 'Vithoba',
+    dosage: '50GM',
+    uses: ['Teeth cleaning', 'Gum care', 'Oral hygiene'],
+    sideEffects: '',
+  },
+  {
+    name: 'Vithoba Ayu Manjan - 80GM',
+    category: 'Oral Care',
+    stock: 150,
+    price: 0,
+    manufacturer: 'Vithoba',
+    dosage: '80GM',
+    uses: ['Teeth cleaning', 'Gum care', 'Oral hygiene'],
+    sideEffects: '',
+  },
+  {
+    name: 'Vithoba Ayu Manjan - 200GM',
+    category: 'Oral Care',
+    stock: 150,
+    price: 0,
+    manufacturer: 'Vithoba',
+    dosage: '200GM',
+    uses: ['Teeth cleaning', 'Gum care', 'Oral hygiene'],
+    sideEffects: '',
+  },
+  {
+    name: 'Vithoba Premium Gel - 80GM',
+    category: 'Oral Care',
+    stock: 150,
+    price: 0,
+    manufacturer: 'Vithoba',
+    dosage: '80GM',
+    uses: ['Teeth cleaning', 'Cavity protection', 'Oral hygiene'],
+    sideEffects: '',
+  },
+  {
+    name: 'Vithoba Premium Gel - 200GM',
+    category: 'Oral Care',
+    stock: 150,
+    price: 0,
+    manufacturer: 'Vithoba',
+    dosage: '200GM',
+    uses: ['Teeth cleaning', 'Cavity protection', 'Oral hygiene'],
+    sideEffects: '',
+  },
+  {
+    name: 'Vithoba Premium Paste - 40GM',
+    category: 'Oral Care',
+    stock: 150,
+    price: 0,
+    manufacturer: 'Vithoba',
+    dosage: '40GM',
+    uses: ['Teeth cleaning', 'Oral hygiene'],
+    sideEffects: '',
+  },
+  {
+    name: 'Vithoba Rootfix - 40GM',
+    category: 'Oral Care',
+    stock: 150,
+    price: 0,
+    manufacturer: 'Vithoba',
+    dosage: '40GM',
+    uses: ['Gum care', 'Root strengthening', 'Oral hygiene'],
+    sideEffects: '',
+  },
+  {
+    name: 'Vithoba Rootfix - 80GM',
+    category: 'Oral Care',
+    stock: 150,
+    price: 0,
+    manufacturer: 'Vithoba',
+    dosage: '80GM',
+    uses: ['Gum care', 'Root strengthening', 'Oral hygiene'],
+    sideEffects: '',
+  },
+  {
+    name: 'Vithoba Rootfix - 150GM',
+    category: 'Oral Care',
+    stock: 150,
+    price: 0,
+    manufacturer: 'Vithoba',
+    dosage: '150GM',
+    uses: ['Gum care', 'Root strengthening', 'Oral hygiene'],
+    sideEffects: '',
+  },
+  {
+    name: 'Vithoba Vaijanthi Soap - 75GM',
+    category: 'Personal Care',
+    stock: 150,
+    price: 0,
+    manufacturer: 'Vithoba',
+    dosage: '75GM',
+    uses: ['Daily bathing', 'Skin care'],
+    sideEffects: '',
+  },
+  {
+    name: 'Expert Brush',
+    category: 'Oral Care',
+    stock: 150,
+    price: 0,
+    manufacturer: 'Vithoba',
+    uses: ['Teeth brushing', 'Oral hygiene'],
+    sideEffects: '',
+  },
+];
+
+async function seed() {
+  try {
+    await mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/medassist');
+    console.log('✅ Connected to MongoDB');
+
+    // Clear existing medicines
+    await Medicine.deleteMany({});
+    console.log('🗑️  Cleared existing medicines');
+
+    // Insert seed data
+    const inserted = await Medicine.insertMany(seedMedicines);
+    console.log(`✅ Seeded ${inserted.length} medicines`);
+
+    process.exit(0);
+  } catch (error) {
+    console.error('❌ Seeding error:', error);
+    process.exit(1);
+  }
+}
+
+seed();

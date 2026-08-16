@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MedAssist AI - Pharmacy Assistant Chatbot</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              medical: {
+                50: "#f0fdf9",
+                100: "#dcfce7",
+                200: "#bbf7d0",
+                400: "#34d399",
+                500: "#10b981",
+                600: "#059669",
+                700: "#047857",
+                blue: "#e0f2fe",
+              },
+            },
+          },
+        },
+      };
+    </script>
+    <script>
+      (function () {
+        const savedTheme = localStorage.getItem("theme");
+        if (savedTheme === "light") {
+          document.documentElement.classList.remove("dark");
+        } else {
+          document.documentElement.classList.add("dark");
+        }
+      })();
+    </script>
+  </head>
+  <body class="bg-slate-100 text-slate-800 dark:bg-slate-950 dark:text-slate-100">
+    <div class="min-h-screen grid grid-cols-1 lg:grid-cols-[280px_1fr_320px]">
+      <!-- Sidebar -->
+      <aside class="bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-800 p-5 flex flex-col">
+        <div class="flex items-center gap-3 mb-8">
+          <div
+            class="h-11 w-11 rounded-xl bg-gradient-to-br from-medical-500 to-cyan-500 text-white font-bold grid place-items-center shadow"
+          >
+            M
+          </div>
+          <div>
+            <h1 class="text-lg font-semibold">MedAssist AI</h1>
+            <p class="text-xs text-slate-500 dark:text-slate-400">Distributor Portal</p>
+          </div>
+        </div>
+
+        <nav class="space-y-2">
+          <button
+            class="w-full text-left px-4 py-2.5 rounded-xl bg-medical-50 dark:bg-medical-600/20 text-medical-700 dark:text-medical-200 font-medium border border-medical-100 dark:border-medical-700"
+          >
+            💬 Chat
+          </button>
+          <button
+            class="w-full text-left px-4 py-2.5 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 transition"
+          >
+            📦 Product Catalog
+          </button>
+          <button
+            class="w-full text-left px-4 py-2.5 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 transition"
+          >
+            🏬 Inventory
+          </button>
+          <button
+            class="w-full text-left px-4 py-2.5 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 transition"
+          >
+            🧾 Orders
+          </button>
+        </nav>
+
+        <section class="mt-8">
+          <h2 class="text-sm font-semibold text-slate-600 dark:text-slate-300 mb-3">
+            Distributor Dashboard
+          </h2>
+          <div class="bg-medical-50 dark:bg-slate-800 border border-medical-100 dark:border-slate-700 rounded-2xl p-4 space-y-3">
+            <div class="flex justify-between text-sm">
+              <span class="text-slate-600 dark:text-slate-300">Total Products</span>
+              <span class="font-semibold">1200</span>
+            </div>
+            <div class="flex justify-between text-sm">
+              <span class="text-slate-600 dark:text-slate-300">Low Stock</span>
+              <span class="font-semibold text-amber-600">45</span>
+            </div>
+            <div class="flex justify-between text-sm">
+              <span class="text-slate-600 dark:text-slate-300">Out of Stock</span>
+              <span class="font-semibold text-rose-600">12</span>
+            </div>
+          </div>
+        </section>
+
+        <div class="mt-auto text-xs text-slate-400 dark:text-slate-500 pt-8">
+          © 2026 MedAssist AI
+        </div>
+      </aside>
+
+      <!-- Main Chat Area -->
+      <main class="flex flex-col h-screen bg-slate-50 dark:bg-slate-900">
+        <!-- Header -->
+        <header
+          class="bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 px-4 md:px-8 py-4 flex items-center justify-between"
+        >
+          <div>
+            <h2 class="text-xl md:text-2xl font-semibold">Pharmacy Assistant</h2>
+            <p class="text-sm text-slate-500 dark:text-slate-400">
+              Ask about medicines, stock, pricing, and availability
+            </p>
+          </div>
+          <div class="flex items-center gap-3 text-sm text-slate-600 dark:text-slate-300">
+            <button
+              id="themeToggle"
+              class="h-10 px-3 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700"
+              title="Toggle dark mode"
+            >
+              🌙
+            </button>
+            <div class="flex items-center gap-2">
+              <span class="h-2.5 w-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
+              Online
+            </div>
+          </div>
+        </header>
+
+        <!-- Chat messages -->
+        <section id="chatWindow" class="flex-1 overflow-y-auto px-4 md:px-8 py-6 space-y-4">
+          <!-- Bot -->
+          <div class="flex justify-start">
+            <div class="max-w-[85%] md:max-w-[65%]">
+              <div class="bg-white dark:bg-slate-800 rounded-2xl rounded-bl-md px-4 py-3 shadow-sm border border-slate-200 dark:border-slate-700">
+                Yes, Paracetamol 500mg is available. Stock: 250 strips. Price: ₹25 per strip.
+              </div>
+              <p class="text-xs text-slate-400 dark:text-slate-500 mt-1 ml-1">10:01 AM</p>
+            </div>
+          </div>
+
+          <!-- User -->
+          <div class="flex justify-end">
+            <div class="max-w-[85%] md:max-w-[65%]">
+              <div
+                class="bg-medical-100 dark:bg-medical-600/20 text-slate-800 dark:text-slate-100 rounded-2xl rounded-br-md px-4 py-3 shadow-sm border border-medical-200 dark:border-medical-700"
+              >
+                Do you have Paracetamol 500?
+              </div>
+              <p class="text-xs text-slate-400 dark:text-slate-500 mt-1 text-right mr-1">10:00 AM</p>
+            </div>
+          </div>
+
+          <!-- Bot -->
+          <div class="flex justify-start">
+            <div class="max-w-[85%] md:max-w-[65%]">
+              <div class="bg-white dark:bg-slate-800 rounded-2xl rounded-bl-md px-4 py-3 shadow-sm border border-slate-200 dark:border-slate-700">
+                Available antibiotics include Amoxicillin, Azithromycin, and Ciprofloxacin.
+              </div>
+              <p class="text-xs text-slate-400 dark:text-slate-500 mt-1 ml-1">10:03 AM</p>
+            </div>
+          </div>
+
+          <!-- User -->
+          <div class="flex justify-end">
+            <div class="max-w-[85%] md:max-w-[65%]">
+              <div
+                class="bg-medical-100 dark:bg-medical-600/20 text-slate-800 dark:text-slate-100 rounded-2xl rounded-br-md px-4 py-3 shadow-sm border border-medical-200 dark:border-medical-700"
+              >
+                Show me antibiotics
+              </div>
+              <p class="text-xs text-slate-400 dark:text-slate-500 mt-1 text-right mr-1">10:02 AM</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- Input & suggestions -->
+        <footer class="bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800 p-4 md:px-8 md:py-4 space-y-3">
+          <div class="flex flex-wrap gap-2">
+            <button class="suggestion px-3 py-1.5 text-sm rounded-full border border-slate-300 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800">
+              Check stock
+            </button>
+            <button class="suggestion px-3 py-1.5 text-sm rounded-full border border-slate-300 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800">
+              Show offers
+            </button>
+            <button class="suggestion px-3 py-1.5 text-sm rounded-full border border-slate-300 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800">
+              Search medicine
+            </button>
+            <button class="suggestion px-3 py-1.5 text-sm rounded-full border border-slate-300 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800">
+              View catalog
+            </button>
+          </div>
+
+          <div class="flex items-center gap-2">
+            <input
+              id="chatInput"
+              type="text"
+              placeholder="Type your question..."
+              class="flex-1 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-medical-400"
+            />
+            <button
+              id="micBtn"
+              class="h-11 w-11 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 grid place-items-center"
+              title="Voice feature coming soon"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-slate-600 dark:text-slate-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 3a3 3 0 00-3 3v6a3 3 0 106 0V6a3 3 0 00-3-3zm-7 9a7 7 0 0014 0M12 19v2m-3 0h6" />
+              </svg>
+            </button>
+            <button
+              id="sendBtn"
+              class="rounded-xl bg-medical-600 hover:bg-medical-700 text-white px-5 py-3 font-medium shadow"
+            >
+              Send
+            </button>
+          </div>
+        </footer>
+      </main>
+
+      <!-- Right panel -->
+      <aside class="hidden lg:block bg-white dark:bg-slate-900 border-l border-slate-200 dark:border-slate-800 p-5">
+        <h3 class="text-base font-semibold mb-4">Product Quick Info</h3>
+        <div class="rounded-2xl border border-slate-200 dark:border-slate-700 p-4 bg-slate-50 dark:bg-slate-800 space-y-3 shadow-sm">
+          <div>
+            <p class="text-xs text-slate-500 dark:text-slate-400">Medicine Name</p>
+            <p class="font-medium">Paracetamol 500mg</p>
+          </div>
+          <div>
+            <p class="text-xs text-slate-500 dark:text-slate-400">Category</p>
+            <p class="font-medium">Analgesic / Antipyretic</p>
+          </div>
+          <div>
+            <p class="text-xs text-slate-500 dark:text-slate-400">Stock</p>
+            <p class="font-medium text-emerald-600">250 strips</p>
+          </div>
+          <div>
+            <p class="text-xs text-slate-500 dark:text-slate-400">Price</p>
+            <p class="font-medium">₹25 per strip</p>
+          </div>
+          <div>
+            <p class="text-xs text-slate-500 dark:text-slate-400">Manufacturer</p>
+            <p class="font-medium">MediCore Pharma Ltd.</p>
+          </div>
+        </div>
+      </aside>
+    </div>
+
+    <script>
+      const chatWindow = document.getElementById("chatWindow");
+      const chatInput = document.getElementById("chatInput");
+      const sendBtn = document.getElementById("sendBtn");
+      const micBtn = document.getElementById("micBtn");
+      const themeToggle = document.getElementById("themeToggle");
+      const suggestionButtons = document.querySelectorAll(".suggestion");
+
+      function syncThemeIcon() {
+        const isDark = document.documentElement.classList.contains("dark");
+        themeToggle.textContent = isDark ? "☀️" : "🌙";
+      }
+
+      syncThemeIcon();
+
+      themeToggle.addEventListener("click", () => {
+        document.documentElement.classList.toggle("dark");
+        const isDark = document.documentElement.classList.contains("dark");
+        localStorage.setItem("theme", isDark ? "dark" : "light");
+        syncThemeIcon();
+      });
+
+      function timeNow() {
+        return new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+      }
+
+      function addMessage(text, sender = "user") {
+        const wrap = document.createElement("div");
+        wrap.className = sender === "user" ? "flex justify-end" : "flex justify-start";
+
+        wrap.innerHTML = `
+          <div class="max-w-[85%] md:max-w-[65%]">
+            <div class="${
+              sender === "user"
+                ? "bg-medical-100 dark:bg-medical-600/20 border border-medical-200 dark:border-medical-700 text-slate-800 dark:text-slate-100 rounded-2xl rounded-br-md"
+                : "bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl rounded-bl-md"
+            } px-4 py-3 shadow-sm">
+              ${text}
+            </div>
+            <p class="text-xs text-slate-400 dark:text-slate-500 mt-1 ${
+              sender === "user" ? "text-right mr-1" : "ml-1"
+            }">${timeNow()}</p>
+          </div>
+        `;
+        chatWindow.appendChild(wrap);
+        chatWindow.scrollTop = chatWindow.scrollHeight;
+      }
+
+      function fallbackReply(userText) {
+        const t = userText.toLowerCase();
+        if (t.includes("paracetamol")) {
+          return "Yes, Paracetamol 500mg is available. Stock: 250 strips. Price: ₹25 per strip.";
+        }
+        if (t.includes("antibiotic")) {
+          return "Available antibiotics include Amoxicillin, Azithromycin, and Ciprofloxacin.";
+        }
+        if (t.includes("stock")) return "Current low-stock items: 45. Out-of-stock items: 12.";
+        if (t.includes("offers")) return "Current offer: 8% discount on bulk orders above 500 strips.";
+        if (t.includes("catalog")) return "Catalog updated. You can browse by category, brand, or molecule.";
+        return "I can help with medicine availability, stock status, pricing, and catalog search.";
+      }
+
+      async function getBotReply(userText) {
+        try {
+          const res = await fetch("/api/chat", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ message: userText }),
+          });
+
+          if (!res.ok) {
+            throw new Error(`HTTP ${res.status}`);
+          }
+
+          const data = await res.json();
+          return data.reply || fallbackReply(userText);
+        } catch {
+          return fallbackReply(userText);
+        }
+      }
+
+      async function sendMessage() {
+        const text = chatInput.value.trim();
+        if (!text) return;
+        addMessage(text, "user");
+        chatInput.value = "";
+        const reply = await getBotReply(text);
+        setTimeout(() => addMessage(reply, "bot"), 250);
+      }
+
+      sendBtn.addEventListener("click", sendMessage);
+      chatInput.addEventListener("keydown", (e) => {
+        if (e.key === "Enter") sendMessage();
+      });
+
+      suggestionButtons.forEach((btn) => {
+        btn.addEventListener("click", () => {
+          chatInput.value = btn.textContent.trim();
+          chatInput.focus();
+        });
+      });
+
+      micBtn.addEventListener("click", () => {
+        addMessage("Voice input feature will be available soon.", "bot");
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: medassist-api
+  namespace: medassist
+  labels:
+    app: medassist-api
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: medassist-api
+  template:
+    metadata:
+      labels:
+        app: medassist-api
+    spec:
+      containers:
+        - name: medassist-api
+          image: acrpharmacy.azurecr.io/medassist-ai:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 5000
+          env:
+            - name: PORT
+              value: "5000"
+          readinessProbe:
+            httpGet:
+              path: /api/health
+              port: 5000
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /api/health
+              port: 5000
+            initialDelaySeconds: 10
+            periodSeconds: 20
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "128Mi"
+            limits:
+              cpu: "500m"
+              memory: "512Mi"

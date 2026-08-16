@@ -1,0 +1,37 @@
+[
+  {
+    "name": "Paracetamol 500mg",
+    "category": "Analgesic / Antipyretic",
+    "stock": 250,
+    "price": 25,
+    "manufacturer": "MediCore Pharma Ltd."
+  },
+  {
+    "name": "Amoxicillin 500mg",
+    "category": "Antibiotic",
+    "stock": 160,
+    "price": 120,
+    "manufacturer": "HealWell Pharma"
+  },
+  {
+    "name": "Azithromycin 500mg",
+    "category": "Antibiotic",
+    "stock": 95,
+    "price": 180,
+    "manufacturer": "NovaCure Labs"
+  },
+  {
+    "name": "Ciprofloxacin 500mg",
+    "category": "Antibiotic",
+    "stock": 70,
+    "price": 145,
+    "manufacturer": "PrimeMed Biotech"
+  },
+  {
+    "name": "Cetirizine 10mg",
+    "category": "Antihistamine",
+    "stock": 340,
+    "price": 18,
+    "manufacturer": "Aster Remedies"
+  }
+]
